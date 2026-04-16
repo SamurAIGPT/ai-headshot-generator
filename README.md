@@ -4,7 +4,7 @@
 
 ## 🌐 Live Manifestation
 
-Experience the full glassmorphic, responsive interface. Sign in with Google to explore the Portrait Studio, My Headshots archive, and Booking Tiers directly from your browser.
+**[Experience the full glassmorphic, responsive interface here](https://ai-headshot-generator-xi.vercel.app/)**. Sign in with Google to explore the Portrait Studio, My Headshots archive, and Booking Tiers directly from your browser.
 
 ---
 
