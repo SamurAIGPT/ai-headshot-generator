@@ -2,6 +2,11 @@
 
 > **A beautifully designed, fully-integrated AI headshot studio.** Built with Next.js, this open-source template serves as a complete, self-contained SaaS boilerplate for generating high-quality professional portraits and business headshots for LinkedIn, teams, and personal branding.
 
+## Related Projects
+
+- [Awesome-GPT-Image-2-API-Prompts](https://github.com/Anil-matcha/Awesome-GPT-Image-2-API-Prompts) — Curated GPT-Image-2 prompts including headshot styles
+- [Open-Generative-AI](https://github.com/Anil-matcha/Open-Generative-AI) — Free self-hosted studio with 200+ image models
+
 ## 🌐 Live Manifestation
 
 **[Experience the full glassmorphic, responsive interface here](https://ai-headshot-generator-xi.vercel.app/)**. Sign in with Google to explore the Portrait Studio, My Headshots archive, and Booking Tiers directly from your browser.
