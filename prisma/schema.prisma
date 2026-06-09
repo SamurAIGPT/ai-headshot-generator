@@ -42,7 +42,6 @@ model User {
   credits       Int           @default(10)
   accounts      Account[]
   sessions      Session[]
-  instances     AppInstance[]
   creations     Creation[]
 }
 
@@ -54,38 +53,18 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model AppInstance {
-  id         String     @id
-  name       String
-  templateId String
-  config     String?    @db.Text
-  createdAt  DateTime   @default(now())
-  userId     String
-  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  creations  Creation[]
-}
-
 model Creation {
-  id           String       @id @default(cuid())
-  prompt       String?      @db.Text
-  aspectRatio  String?
-  resolution   String?
-  createdAt    DateTime     @default(now())
-  userId       String
-  requestId    String?      @unique
-  status       String       @default("processing")
-  error        String?      @db.Text
-  appId        String?
-  inputImage   String?      @db.Text
-  resultImage  String?      @db.Text
-  creditCost   Int          @default(1)
-  customData   String?      @db.Text
-  greeting     String?      @db.Text
-  name         String?
-  systemPrompt String?      @db.Text
+  id           String   @id @default(cuid())
   category     String?
-  imageUrl     String?      @db.Text
-  isPack       Boolean      @default(false)
-  app          AppInstance? @relation(fields: [appId], references: [id], onDelete: Cascade)
-  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  imageUrl     String?  @db.Text
+  isPack       Boolean  @default(false)
+  aspectRatio  String?
+  createdAt    DateTime @default(now())
+  userId       String
+  
+  requestId    String?  @unique
+  status       String   @default("processing")
+  error        String?  @db.Text
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
