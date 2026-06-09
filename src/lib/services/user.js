@@ -1,24 +1,16 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "../prisma";
 
-/**
- * Service to manage User data and Credits.
- */
 export const UserService = {
-  /**
-   * Get user credits by ID
-   */
   async getCredits(userId) {
     const user = await prisma.user.findUnique({
       where: { id: userId },
       select: { credits: true },
     });
-    return user?.credits || 0;
+    return user ? user.credits : 0;
   },
 
-  /**
-   * Add credits to a user
-   */
   async addCredits(userId, amount) {
+    if (amount <= 0) return;
     return await prisma.user.update({
       where: { id: userId },
       data: {
@@ -29,17 +21,13 @@ export const UserService = {
     });
   },
 
-  /**
-   * Deduct credits from a user
-   */
-  async deductCredits(userId, amount = 1) {
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: { credits: true },
-    });
-
-    if (!user || user.credits < amount) {
-      throw new Error("Insufficient credits");
+  async deductCredits(userId, amount) {
+    if (amount <= 0) return;
+    
+    // Check if the user has enough credits
+    const currentCredits = await this.getCredits(userId);
+    if (currentCredits < amount) {
+      throw new Error("Insufficient credits available");
     }
 
     return await prisma.user.update({
@@ -51,13 +39,4 @@ export const UserService = {
       },
     });
   },
-
-  /**
-   * Find or create user by email (helper for non-OIDC flows if needed)
-   */
-  async findByEmail(email) {
-    return await prisma.user.findUnique({
-      where: { email },
-    });
-  }
 };

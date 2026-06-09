@@ -13,15 +13,14 @@ model Account {
   type               String
   provider           String
   providerAccountId  String
-  refresh_token      String?  @db.Text
-  access_token       String?  @db.Text
+  refresh_token      String? @db.Text
+  access_token       String? @db.Text
   expires_at         Int?
   token_type         String?
   scope              String?
-  id_token           String?  @db.Text
+  id_token           String? @db.Text
   session_state      String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -35,31 +34,16 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String        @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?       @unique
   emailVerified DateTime?
   image         String?
-  credits       Int       @default(10)
+  credits       Int           @default(10)
   accounts      Account[]
   sessions      Session[]
+  instances     AppInstance[]
   creations     Creation[]
-}
-
-model Creation {
-  id           String   @id @default(cuid())
-  category     String?
-  imageUrl     String?  @db.Text
-  isPack       Boolean  @default(false)
-  aspectRatio  String?
-  createdAt    DateTime @default(now())
-  userId       String
-  
-  requestId    String?  @unique
-  status       String   @default("processing")
-  error        String?  @db.Text
-  
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model VerificationToken {
@@ -68,4 +52,40 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model AppInstance {
+  id         String     @id
+  name       String
+  templateId String
+  config     String?    @db.Text
+  createdAt  DateTime   @default(now())
+  userId     String
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  creations  Creation[]
+}
+
+model Creation {
+  id           String       @id @default(cuid())
+  prompt       String?      @db.Text
+  aspectRatio  String?
+  resolution   String?
+  createdAt    DateTime     @default(now())
+  userId       String
+  requestId    String?      @unique
+  status       String       @default("processing")
+  error        String?      @db.Text
+  appId        String?
+  inputImage   String?      @db.Text
+  resultImage  String?      @db.Text
+  creditCost   Int          @default(1)
+  customData   String?      @db.Text
+  greeting     String?      @db.Text
+  name         String?
+  systemPrompt String?      @db.Text
+  category     String?
+  imageUrl     String?      @db.Text
+  isPack       Boolean      @default(false)
+  app          AppInstance? @relation(fields: [appId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

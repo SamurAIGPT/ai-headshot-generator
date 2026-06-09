@@ -4,6 +4,7 @@
  */
 
 const config = {
+  appName: "Ai Headshot Generator",
   auth: {
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID,
