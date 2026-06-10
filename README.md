@@ -2,6 +2,14 @@
 
 > **A beautifully designed, fully-integrated AI headshot studio.** Built with Next.js, this open-source template serves as a complete, self-contained SaaS boilerplate for generating high-quality professional portraits and business headshots for LinkedIn, teams, and personal branding.
 
+<p align="center">
+  <a href="https://github.com/Anil-matcha/awesome-generative-ai-apps">
+    <img src="https://img.shields.io/badge/Part%20of-Awesome%20Generative%20AI%20Apps-FFD700?style=for-the-badge&logo=github&logoColor=black" alt="Awesome Generative AI Apps">
+  </a>
+</p>
+
+> 🎨 **[Explore 50+ more open-source AI apps →](https://github.com/Anil-matcha/awesome-generative-ai-apps)**
+
 ## Related Projects
 
 - [Awesome-GPT-Image-2-API-Prompts](https://github.com/Anil-matcha/Awesome-GPT-Image-2-API-Prompts) — Curated GPT-Image-2 prompts including headshot styles
