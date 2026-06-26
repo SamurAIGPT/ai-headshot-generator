@@ -43,6 +43,7 @@
   --glass-hover: rgba(63, 63, 70, 0.6);
   --muted: #a1a1aa;
   --foreground: #f4f4f5;
+  --solid-bg: #202024;
 }
 
 /* Premium Visual Themes Override Definitions */
@@ -66,6 +67,7 @@
   --glass-bg: rgba(14, 5, 28, 0.6);
   --glass-border: rgba(236, 72, 153, 0.4);
   --glass-hover: rgba(27, 12, 50, 0.6);
+  --solid-bg: #150827;
 }
 
 [data-theme="emerald"] {
@@ -88,6 +90,7 @@
   --glass-bg: rgba(6, 78, 59, 0.6);
   --glass-border: rgba(17, 94, 89, 0.4);
   --glass-hover: rgba(15, 118, 110, 0.6);
+  --solid-bg: #042f2e;
 }
 
 [data-theme="sunset"] {
@@ -110,6 +113,7 @@
   --glass-bg: rgba(45, 21, 0, 0.6);
   --glass-border: rgba(234, 88, 12, 0.4);
   --glass-hover: rgba(69, 36, 0, 0.6);
+  --solid-bg: #371b00;
 }
 
 [data-theme="midnight"] {
@@ -132,6 +136,7 @@
   --glass-bg: rgba(12, 12, 14, 0.6);
   --glass-border: rgba(45, 45, 52, 0.4);
   --glass-hover: rgba(30, 30, 36, 0.6);
+  --solid-bg: #151518;
 }
 
 .bg-primary {

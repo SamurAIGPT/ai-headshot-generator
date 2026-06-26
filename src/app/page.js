@@ -378,7 +378,7 @@ export default function Home() {
                 </div>
               </div>
             ) : (
-              <div className="relative aspect-square rounded-2xl bg-glass-bg overflow-hidden group border-2 border-primary-500/20">
+              <div className="relative w-32 aspect-square rounded-2xl bg-glass-bg overflow-hidden group border-2 border-primary-500/20">
                 <img
                   src={referenceImage}
                   className="w-full h-full object-cover"

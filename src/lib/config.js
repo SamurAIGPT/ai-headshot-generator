@@ -28,7 +28,7 @@ const config = {
   },
   ai: {
     headshot: {
-      apiKey: process.env.HEADSHOT_API_KEY,
+      apiKey: process.env.MUAPIAPP_API_KEY,
       endpoint: "https://api.muapi.ai/api/v1/photo-pack",
     }
   },
