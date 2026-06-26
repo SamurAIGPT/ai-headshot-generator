@@ -92,6 +92,56 @@ export const AIService = {
       throw new Error(creation.error || "Generation failed.");
     }
 
+    // Proactively query MuAPI if the database status is processing
+    try {
+      const apiKey = config.ai.headshot.apiKey;
+      if (apiKey) {
+        const pollUrl = `https://api.muapi.ai/api/v1/predictions/${requestId}/result`;
+        const res = await fetch(pollUrl, {
+          method: "GET",
+          headers: {
+            "x-api-key": apiKey,
+          },
+        });
+
+        if (res.ok) {
+          const result = await res.json();
+          const apiStatus = result.status;
+
+          if (apiStatus === "completed") {
+            const outputs = result.outputs || [];
+            const imageUrlStr = JSON.stringify(outputs);
+            
+            await creationModel.update({
+              where: { id: creation.id },
+              data: {
+                status: "completed",
+                imageUrl: imageUrlStr,
+              }
+            });
+
+            return { status: "completed", imageUrl: outputs };
+          } else if (apiStatus === "failed") {
+            const apiError = result.error || "Generation failed.";
+            await creationModel.update({
+              where: { id: creation.id },
+              data: {
+                status: "failed",
+                error: apiError,
+              }
+            });
+            throw new Error(apiError);
+          }
+        }
+      }
+    } catch (err) {
+      console.error("Proactive status check error:", err);
+      // Fallback: if Direct status check fails, return failed if database already failed
+      if (creation.status === "failed") {
+        throw new Error(creation.error || "Generation failed.");
+      }
+    }
+
     return { status: "processing" };
   }
 };
