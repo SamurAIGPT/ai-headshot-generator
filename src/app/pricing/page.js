@@ -2,7 +2,6 @@
 
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { FaCheck, FaInfoCircle } from "react-icons/fa";
 import axios from "axios";
@@ -44,7 +43,6 @@ export default function Pricing() {
   return (
     <div className="flex min-h-dvh flex-col bg-bg-page select-none text-primary-text overflow-hidden">
       <Toaster position="top-right" />
-      <Navbar />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 py-12 sm:px-6 lg:px-8 flex flex-col gap-10 overflow-y-auto scrollbar-subtle items-center">
         <div className="text-center space-y-4">
