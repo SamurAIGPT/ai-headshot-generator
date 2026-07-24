@@ -455,7 +455,7 @@ export default function Home() {
             ) : (
               <FaBolt className="text-yellow-400" />
             )}
-            {loading ? "PROCESSING..." : "Generate 60 Credits"}
+            {loading ? "PROCESSING..." : (Boolean(session?.user?.customApiKey) ? "Generate (Custom API Key • 0 Credits)" : "Generate 60 Credits")}
           </button>
         </div>
       </aside>

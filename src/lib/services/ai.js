@@ -16,12 +16,16 @@ export const AIService = {
   /**
    * Execute a headshot generation quest using muapi.ai photo-pack
    */
-  async generate(userId, { image_url, category, aspect_ratio = "1:1" }) {
-    const cost = this.getCreditCost();
-    await UserService.deductCredits(userId, cost);
+  async generate(userId, { image_url, category, aspect_ratio = "1:1" }, customApiKey = null) {
+    const isUsingCustomKey = Boolean(customApiKey && customApiKey.trim().length > 0);
+    const cost = isUsingCustomKey ? 0 : this.getCreditCost();
+    
+    if (!isUsingCustomKey && cost > 0) {
+      await UserService.deductCredits(userId, cost);
+    }
 
-    const apiKey = config.ai.headshot.apiKey;
-    if (!apiKey) throw new Error("HEADSHOT_API_KEY is not configured");
+    const apiKey = isUsingCustomKey ? customApiKey.trim() : config.ai.headshot.apiKey;
+    if (!apiKey) throw new Error("API Key is not configured");
 
     const webhookUrl = `${config.auth.webhook_url}/api/webhook/muapi`;
     const submitUrl = `${config.ai.headshot.endpoint}?webhook=${encodeURIComponent(webhookUrl)}`;
@@ -67,7 +71,7 @@ export const AIService = {
   /**
    * Check the status of a specific generation (Polling fallback)
    */
-  async checkStatus(requestId, userId, metadata) {
+  async checkStatus(requestId, userId, metadata, customApiKey = null) {
     const creationModel = prisma.creation || prisma.Creation;
     if (!creationModel) return { status: "processing" };
 
@@ -94,7 +98,7 @@ export const AIService = {
 
     // Proactively query MuAPI if the database status is processing
     try {
-      const apiKey = config.ai.headshot.apiKey;
+      const apiKey = (customApiKey && customApiKey.trim().length > 0) ? customApiKey.trim() : config.ai.headshot.apiKey;
       if (apiKey) {
         const pollUrl = `https://api.muapi.ai/api/v1/predictions/${requestId}/result`;
         const res = await fetch(pollUrl, {
@@ -136,7 +140,6 @@ export const AIService = {
       }
     } catch (err) {
       console.error("Proactive status check error:", err);
-      // Fallback: if Direct status check fails, return failed if database already failed
       if (creation.status === "failed") {
         throw new Error(creation.error || "Generation failed.");
       }

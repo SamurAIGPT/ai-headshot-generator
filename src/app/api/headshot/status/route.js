@@ -11,13 +11,17 @@ export async function POST(req) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { requestId, metadata } = await req.json();
+    const body = await req.json();
+    const { requestId, metadata } = body;
 
     if (!requestId) {
       return NextResponse.json({ error: "Request ID is required" }, { status: 400 });
     }
 
-    const result = await AIService.checkStatus(requestId, session.user.id, metadata);
+    const headerApiKey = req.headers.get("x-custom-api-key");
+    const customApiKey = headerApiKey || body.customApiKey || session.user.customApiKey || null;
+
+    const result = await AIService.checkStatus(requestId, session.user.id, metadata, customApiKey);
 
     return NextResponse.json(result);
   } catch (error) {
