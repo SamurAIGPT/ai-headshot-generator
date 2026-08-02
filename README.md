@@ -14,6 +14,7 @@ https://github.com/user-attachments/assets/0ce7f433-1b3d-4525-844f-a7b7628f4bb8
 
 ## Related Projects
 
+- [MuAPI](https://muapi.ai) — Unified API for image, video, and audio generation across hundreds of AI models. Try [GPT Image 2](https://muapi.ai/playground/gpt-image-2-text-to-image) in the [image playground](https://muapi.ai/playground).
 - [Awesome-GPT-Image-2-API-Prompts](https://github.com/Anil-matcha/Awesome-GPT-Image-2-API-Prompts) — Curated GPT-Image-2 prompts including headshot styles
 - [Open-Generative-AI](https://github.com/Anil-matcha/Open-Generative-AI) — Free self-hosted studio with 200+ image models
 - [awesome-ai-image-models](https://github.com/Anil-matcha/awesome-ai-image-models) — compare AI image models by API, price & quality
