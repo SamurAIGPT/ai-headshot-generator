@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { UserService } from "./user";
 import config from "@/lib/config";
+import { buildMuapiWebhookUrl, createMuapiWebhookToken, hashMuapiWebhookToken } from "./muapi-webhook";
 
 /**
  * Service to manage AI Headshot Studio generations using muapi.ai
@@ -27,7 +28,22 @@ export const AIService = {
     const apiKey = isUsingCustomKey ? customApiKey.trim() : config.ai.headshot.apiKey;
     if (!apiKey) throw new Error("API Key is not configured");
 
-    const webhookUrl = `${config.auth.webhook_url}/api/webhook/muapi`;
+    const creationModel = prisma.creation || prisma.Creation;
+    if (!creationModel) throw new Error("Creation model is not available");
+
+    const webhookToken = createMuapiWebhookToken();
+    const creation = await creationModel.create({
+      data: {
+        userId,
+        category,
+        aspectRatio: aspect_ratio,
+        status: "processing",
+        isPack: true,
+        webhookTokenHash: hashMuapiWebhookToken(webhookToken),
+      }
+    });
+
+    const webhookUrl = buildMuapiWebhookUrl(config.auth.webhook_url, webhookToken);
     const submitUrl = `${config.ai.headshot.endpoint}?webhook=${encodeURIComponent(webhookUrl)}`;
     
     const submitRes = await fetch(submitUrl, {
@@ -45,25 +61,17 @@ export const AIService = {
 
     if (!submitRes.ok) {
       const errorText = await submitRes.text();
+      await creationModel.deleteMany({ where: { id: creation.id, status: "processing", requestId: null } });
       throw new Error(`API Submission Failed: ${submitRes.status} ${errorText}`);
     }
 
     const { request_id } = await submitRes.json();
     if (!request_id) throw new Error("No request_id received from API");
 
-    const creationModel = prisma.creation || prisma.Creation;
-    if (creationModel) {
-      await creationModel.create({
-        data: {
-          userId,
-          category,
-          aspectRatio: aspect_ratio,
-          requestId: request_id,
-          status: "processing",
-          isPack: true,
-        }
-      });
-    }
+    await creationModel.update({
+      where: { id: creation.id },
+      data: { requestId: request_id }
+    });
 
     return { request_id };
   },

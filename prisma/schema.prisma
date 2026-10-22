@@ -64,6 +64,7 @@ model Creation {
   userId       String
   
   requestId    String?  @unique
+  webhookTokenHash String? @unique
   status       String   @default("processing")
   error        String?  @db.Text
   
